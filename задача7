@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+struct list
+{
+	int info;
+	list* next, * pred;
+};
+//создание списка из N элементов
+list* make_list(int n)
+{
+	list* begin = new list;
+	cin >> begin->info;
+	begin->pred = 0;
+	begin->next = 0;
+	list* p, * r;
+	p = begin;
+	for (int i = 1; i < n; i++)
+	{
+		r = new list;
+		cin >> r->info;
+		r->next = 0;
+		r->pred = p;
+		p->next = r;
+		p = r;
+	}
+	return begin;
+}
+//печать списка
+void print_list(list* begin)
+{
+	list* p = begin;
+	while (p != 0)
+	{
+		cout << p->info << " ";
+		p = p->next;
+	}
+}
+//проверка на нули
+int nulik(int a)
+{
+	int f = 0; // нет нулей
+	while (a != 0)
+	{
+		if (a % 10 == 0)
+			return f = 1; //есть нуль
+		a = a / 10;
+	}
+	return f;
+}
+
+void main()
+{
+	int n;
+	cin >> n;
+	list* beg = make_list(n);
+	list* p, * r;
+
+	p = beg->next;
+	while (p!= 0)
+	{
+		if (p->info % 5 == 0 && nulik(p->pred->info) == 0) //кратный 5 элемент до которого элемент без нуля
+		{
+			p->pred->next = p->next; //соединяем левые и правые элементы
+			if(p->next!=0)
+				p->next->pred = p->pred;
+			r = p;
+			p = p->next;
+			delete[]r;
+		}
+		else p = p->next;
+	}
+
+	cout << "///////////////////////////////////////////////\n";
+	print_list(beg);
+	system("pause");
+}
