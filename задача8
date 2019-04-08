@@ -1,0 +1,91 @@
+#include <iostream>
+using namespace std;
+
+struct list
+{
+	int info;
+	list* next, * pred;
+};
+//создание списка из N элементов
+list* make_list(int n)
+{
+	list* begin = new list;
+	cin >> begin->info;
+	begin->pred = 0;
+	begin->next = 0;
+	list* p, * r;
+	p = begin;
+	for (int i = 1; i < n; i++)
+	{
+		r = new list;
+		cin >> r->info;
+		r->next = 0;
+		r->pred = p;
+		p->next = r;
+		p = r;
+	}
+	return begin;
+}
+//печать списка
+void print_list(list* begin)
+{
+	list* p = begin;
+	while (p != 0)
+	{
+		cout << p->info << " ";
+		p = p->next;
+	}
+}
+//ищем макс элемент в списке
+int Max(list* beg)
+{
+	int max = beg->info;
+	list* p = beg;
+	while (p != 0)
+	{
+		if (p->info > max)
+			max = p->info;
+		p = p->next;
+	}
+	return max;
+}
+
+void main()
+{
+	int n;
+	cin >> n;
+	list* beg = make_list(n);
+	list* p, * r;
+
+	int max = Max(beg);
+	//частный случай
+	if (beg->info % 2 == 1)
+	{
+		r = new list;
+		r->info = max;
+		r->next = beg;
+		r->pred = 0;
+		beg->pred = r;
+		p = beg->next;
+		beg = r;
+	}
+	else p = beg->next;;
+	while (p != 0)
+	{
+		if (p->info % 2 == 1)
+		{
+			r = new list;
+			r->info = max;
+			r->next = p;
+			r->pred = p->pred;
+			p->pred->next = r;
+			p->pred = r;
+			p = p->next;
+		}
+		else p = p->next;
+	}
+
+	cout << "///////////////////////////////////////////////\n";
+	print_list(beg);
+	system("pause");
+}
