@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+struct list
+{
+	int info;
+	list* next, * pred;
+};
+//создание списка из N элементов
+list* make_list(int n)
+{
+	list* begin = new list;
+	cin >> begin->info;
+	begin->pred = 0;
+	begin->next = 0;
+	list* p, * r;
+	p = begin;
+	for (int i = 1; i < n; i++)
+	{
+		r = new list;
+		cin >> r->info;
+		r->next = 0;
+		r->pred = p;
+		p->next = r;
+		p = r;
+	}
+	return begin;
+}
+//печать списка
+void print_list(list* begin)
+{
+	list*p = begin;
+	while (p != 0)
+	{
+		cout << p->info << " ";
+		p = p->next;
+	}
+}
+//проверка на простоту
+int prostata(int a)
+{
+	int f = 1; // простое
+	for (int i = 2; i < a; i++)
+		if (a % i == 0)
+			f = 0; //не простое
+	return f;
+}
+
+void main()
+{
+	int n;
+	cin >> n;
+	list* beg = make_list(n);
+	list* p, * r;
+
+	if (beg->next != 0) //если сущ след элемент присваиваю р
+	{
+		p = beg->next;
+		while (p->next != 0) //перебор по списку
+		{
+			if ((p->pred->info % 2 == 0) && (prostata(p->info)) && (p->next->info % 2 == 0)) //проверяю левый правый элемент на четность и сам элемент на простоту
+			{
+				p->pred->next = p->next; //соединяем левые и правые элементы
+				p->next->pred = p->pred;
+				r = p;
+				p = p->next;
+				delete[]r;
+			}
+			else p = p->next; 
+		}
+	}
+	cout << "///////////////////////////////////////////////\n";
+	print_list(beg);
+	system("pause");
+}
